@@ -34,6 +34,30 @@ def vgg_graph(input_image, architecture, include_top=True, pooling=None, classes
 
 
 VGG_STRUCTURES = {
+    "VGG11": {
+        [
+            {
+                "layers": 1,
+                "filters": [(3, 3, 64)]
+            },
+            {
+                "layers": 1,
+                "filters": [(3, 3, 128)]
+            },
+            {
+                "layers": 2,
+                "filters": [(3, 3, 256)]
+            },
+            {
+                "layers": 2,
+                "filters": [(3, 3, 512)]
+            },
+            {
+                "layers": 2,
+                "filters": [(3, 3, 512)]
+            }
+        ]
+    },
     "VGG16": {
         [
             {
@@ -58,4 +82,28 @@ VGG_STRUCTURES = {
             }
         ]
     },
+    "VGG19": {
+        [
+            {
+                "layers": 2,
+                "filters": [(3, 3, 64)]
+            },
+            {
+                "layers": 2,
+                "filters": [(3, 3, 128)]
+            },
+            {
+                "layers": 4,
+                "filters": [(3, 3, 256)]
+            },
+            {
+                "layers": 4,
+                "filters": [(3, 3, 512)]
+            },
+            {
+                "layers": 4,
+                "filters": [(3, 3, 512)]
+            }
+        ]
+    }
 }
