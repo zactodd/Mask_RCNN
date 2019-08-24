@@ -13,7 +13,7 @@ def vgg_graph(input_image, architecture, include_top=True, pooling=None, classes
         layers = stage["layers"]
         for cv, l in enumerate(range(layers)):
             cv_name = "block{}_pool{}".format(bl, cv)
-            x = KL.Conv2D(f, tuple(k), activation='relu', padding='same', name=cv_name)(x)
+            x = KL.Conv2D(f, k, activation='relu', padding='same', name=cv_name)(x)
         mp_name = "block{}_pool".format(bl)
         x = KL.MaxPooling2D((2, 2), strides=(2, 2), name=mp_name)(x)
         stage_checkpoints.append(x)
@@ -37,67 +37,67 @@ VGG_STRUCTURES = {
     "VGG11": [
                 {
                     "layers": 1,
-                    "filters": [(3, 3, 64)]
+                    "filters": (3, 3, 64)
                 },
                 {
                     "layers": 1,
-                    "filters": [(3, 3, 128)]
+                    "filters": (3, 3, 128)
                 },
                 {
                     "layers": 2,
-                    "filters": [(3, 3, 256)]
+                    "filters": (3, 3, 256)
                 },
                 {
                     "layers": 2,
-                    "filters": [(3, 3, 512)]
+                    "filters": (3, 3, 512)
                 },
                 {
                     "layers": 2,
-                    "filters": [(3, 3, 512)]
+                    "filters": (3, 3, 512)
                 }
         ],
     "VGG16": [
                 {
                     "layers": 2,
-                    "filters": [(3, 3, 64)]
+                    "filters": (3, 3, 64)
                 },
                 {
                     "layers": 2,
-                    "filters": [(3, 3, 128)]
+                    "filters": (3, 3, 128)
                 },
                 {
                     "layers": 3,
-                    "filters": [(3, 3, 256)]
+                    "filters": (3, 3, 256)
                 },
                 {
                     "layers": 3,
-                    "filters": [(3, 3, 512)]
+                    "filters": (3, 3, 512)
                 },
                 {
                     "layers": 3,
-                    "filters": [(3, 3, 512)]
+                    "filters": (3, 3, 512)
                 }
         ],
     "VGG19": [
                 {
                     "layers": 2,
-                    "filters": [(3, 3, 64)]
+                    "filters": (3, 3, 64)
                 },
                 {
                     "layers": 2,
-                    "filters": [(3, 3, 128)]
+                    "filters": (3, 3, 128)
                 },
                 {
                     "layers": 4,
-                    "filters": [(3, 3, 256)]
+                    "filters": (3, 3, 256)
                 },
                 {
                     "layers": 4,
-                    "filters": [(3, 3, 512)]
+                    "filters": (3, 3, 512)
                 },
                 {
                     "layers": 4,
-                    "filters": [(3, 3, 512)]
+                    "filters": (3, 3, 512)
                 }
         ]
 }
