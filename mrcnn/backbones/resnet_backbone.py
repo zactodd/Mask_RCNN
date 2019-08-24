@@ -1,7 +1,5 @@
 import keras.layers as KL
 from mrcnn.model import BatchNorm
-import math
-import itertools
 
 
 def resnet_graph(input_image, architecture, stage5=False, train_bn=True):
@@ -76,18 +74,6 @@ def identity_block(input_tensor, filters, stage, block, use_bias=True, train_bn=
     x = KL.Add()([x, input_tensor])
     x = KL.Activation('relu', name='res' + str(stage) + block + '_out')(x)
     return x
-
-
-# TODO improve naming
-def block_names(n):
-    letters = math.ceil(math.log(n, 26))
-    names = []
-    for i, nums in enumerate(itertools.product(range(26), repeat=letters)):
-        if i > n - 1:
-            break
-        else:
-            names.append("".join(chr(num + 97) for num in nums))
-    return names
 
 
 RESNET_STRUCTURES = {
