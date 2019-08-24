@@ -1,5 +1,6 @@
 import keras.layers as KL
 from mrcnn.model import BatchNorm
+from mrcnn.backbones.utils import block_names
 
 
 def resnet_graph(input_image, architecture, stage5=False, train_bn=True):
@@ -36,14 +37,14 @@ def conv_block(input_tensor, filters, stage, block, strides=(2, 2), use_bias=Tru
     conv_name_base = 'res' + str(stage) + block + '_branch'
     bn_name_base = 'bn' + str(stage) + block + '_branch'
 
-    x = None
+    x = input_tensor
     block_suffixes = block_names(len(filters))
     for *k, f, n in zip(filters, block_suffixes):
         kernel = tuple(k)
         cn_name = "{}2{}".format(conv_name_base, n)
         bn_name = "{}2{}".format(bn_name_base, n)
 
-        x = KL.Conv2D(f, kernel, padding='same', strides=strides, name=cn_name, use_bias=use_bias)(input_tensor)
+        x = KL.Conv2D(f, kernel, padding='same', strides=strides, name=cn_name, use_bias=use_bias)(x)
         x = BatchNorm(name=bn_name)(x, training=train_bn)
         x = KL.Activation('relu')(x)
 
@@ -60,14 +61,14 @@ def identity_block(input_tensor, filters, stage, block, use_bias=True, train_bn=
     conv_name_base = 'res' + str(stage) + block + '_branch'
     bn_name_base = 'bn' + str(stage) + block + '_branch'
 
-    x = None
+    x = input_tensor
     block_suffixes = block_names(len(filters))
     for *k, f, n in zip(filters, block_suffixes):
         kernel = tuple(k)
         cn_name = "{}2{}".format(conv_name_base, n)
         bn_name = "{}2{}".format(bn_name_base, n)
 
-        x = KL.Conv2D(f, kernel, padding='same', name=cn_name, use_bias=use_bias)(input_tensor)
+        x = KL.Conv2D(f, kernel, padding='same', name=cn_name, use_bias=use_bias)(x)
         x = BatchNorm(name=bn_name)(x, training=train_bn)
         x = KL.Activation('relu')(x)
 
