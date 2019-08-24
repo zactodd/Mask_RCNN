@@ -9,7 +9,7 @@ def resnet_graph(input_image, architecture, stage5=False, train_bn=True):
         stage5: Boolean. If False, stage5 of the network is not created
         train_bn: Boolean. Train or freeze Batch Norm layers
     """
-    assert architecture in ["resnet18", "resnet34", "resnet50", "resnet101", "resnet34", ]
+    assert architecture in RESNET_STRUCTURES
     # Stage 1
     x = KL.ZeroPadding2D((3, 3))(input_image)
     x = KL.Conv2D(64, (7, 7), strides=(2, 2), name='conv1', use_bias=True)(x)

@@ -1,12 +1,12 @@
 import keras.layers as KL
-from mrcnn.model import BatchNorm
-from mrcnn.backbones.utils import block_names
 
 
 def vgg_graph(input_image, architecture, include_top=True, pooling=None, classes=1000):
+    assert architecture in VGG_STRUCTURES
+    assert pooling in ["avg", "max", None]
 
     x = input_image
-    stages = VGG_STRUCTURES[architecture]
+    stages = VGG_STRUCTURES["VGG11"]
     stage_checkpoints = []
     for bl, stage in enumerate(stages):
         *k, f = stage["filters"]
@@ -34,76 +34,70 @@ def vgg_graph(input_image, architecture, include_top=True, pooling=None, classes
 
 
 VGG_STRUCTURES = {
-    "VGG11": {
-        [
-            {
-                "layers": 1,
-                "filters": [(3, 3, 64)]
-            },
-            {
-                "layers": 1,
-                "filters": [(3, 3, 128)]
-            },
-            {
-                "layers": 2,
-                "filters": [(3, 3, 256)]
-            },
-            {
-                "layers": 2,
-                "filters": [(3, 3, 512)]
-            },
-            {
-                "layers": 2,
-                "filters": [(3, 3, 512)]
-            }
+    "VGG11": [
+                {
+                    "layers": 1,
+                    "filters": [(3, 3, 64)]
+                },
+                {
+                    "layers": 1,
+                    "filters": [(3, 3, 128)]
+                },
+                {
+                    "layers": 2,
+                    "filters": [(3, 3, 256)]
+                },
+                {
+                    "layers": 2,
+                    "filters": [(3, 3, 512)]
+                },
+                {
+                    "layers": 2,
+                    "filters": [(3, 3, 512)]
+                }
+        ],
+    "VGG16": [
+                {
+                    "layers": 2,
+                    "filters": [(3, 3, 64)]
+                },
+                {
+                    "layers": 2,
+                    "filters": [(3, 3, 128)]
+                },
+                {
+                    "layers": 3,
+                    "filters": [(3, 3, 256)]
+                },
+                {
+                    "layers": 3,
+                    "filters": [(3, 3, 512)]
+                },
+                {
+                    "layers": 3,
+                    "filters": [(3, 3, 512)]
+                }
+        ],
+    "VGG19": [
+                {
+                    "layers": 2,
+                    "filters": [(3, 3, 64)]
+                },
+                {
+                    "layers": 2,
+                    "filters": [(3, 3, 128)]
+                },
+                {
+                    "layers": 4,
+                    "filters": [(3, 3, 256)]
+                },
+                {
+                    "layers": 4,
+                    "filters": [(3, 3, 512)]
+                },
+                {
+                    "layers": 4,
+                    "filters": [(3, 3, 512)]
+                }
         ]
-    },
-    "VGG16": {
-        [
-            {
-                "layers": 2,
-                "filters": [(3, 3, 64)]
-            },
-            {
-                "layers": 2,
-                "filters": [(3, 3, 128)]
-            },
-            {
-                "layers": 3,
-                "filters": [(3, 3, 256)]
-            },
-            {
-                "layers": 3,
-                "filters": [(3, 3, 512)]
-            },
-            {
-                "layers": 3,
-                "filters": [(3, 3, 512)]
-            }
-        ]
-    },
-    "VGG19": {
-        [
-            {
-                "layers": 2,
-                "filters": [(3, 3, 64)]
-            },
-            {
-                "layers": 2,
-                "filters": [(3, 3, 128)]
-            },
-            {
-                "layers": 4,
-                "filters": [(3, 3, 256)]
-            },
-            {
-                "layers": 4,
-                "filters": [(3, 3, 512)]
-            },
-            {
-                "layers": 4,
-                "filters": [(3, 3, 512)]
-            }
-        ]
-    }
 }
