@@ -13,16 +13,15 @@ import datetime
 import re
 import math
 import logging
-
 from collections import OrderedDict
 import multiprocessing
 import numpy as np
 import tensorflow as tf
 import keras
-import keras.backend as K
+import tensorflow.keras.backend as K
 import tensorflow.keras.layers as KL
-import keras.engine as KE
-import keras.models as KM
+import tensorflow.keras.engine as KE
+import tensorflow.keras.models as KM
 
 from mrcnn import utils
 
@@ -34,6 +33,7 @@ assert LooseVersion(keras.__version__) >= LooseVersion('2.0.8')
 ############################################################
 #  Utility Functions
 ############################################################
+
 
 def log(text, array=None):
     """Prints a text message. And, optionally, if a Numpy array is provided it
