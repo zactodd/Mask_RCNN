@@ -19,7 +19,7 @@ import numpy as np
 import tensorflow as tf
 import keras
 import keras.backend as K
-import keras.layers as KL
+import tensorflow.keras.layers as KL
 import keras.engine as KE
 import keras.models as KM
 
@@ -29,7 +29,6 @@ from mrcnn import utils
 from distutils.version import LooseVersion
 assert LooseVersion(tf.__version__) >= LooseVersion("1.3")
 assert LooseVersion(keras.__version__) >= LooseVersion('2.0.8')
-
 
 ############################################################
 #  Utility Functions
@@ -2165,11 +2164,12 @@ class MaskRCNN():
         self.keras_model._per_input_losses = {}
         loss_names = [
             "rpn_class_loss",  "rpn_bbox_loss",
-            "mrcnn_class_loss", "mrcnn_bbox_loss", "mrcnn_mask_loss"]
+            "mrcnn_class_loss", "mrcnn_bbox_loss", "mrcnn_mask_loss"
+        ]
         for name in loss_names:
             layer = self.keras_model.get_layer(name)
-            # if layer.output in self.keras_model.losses:
-            #     continue
+            if tf.bool(layer.output in self.keras_model.losses):
+                continue
             loss = (
                 tf.reduce_mean(input_tensor=layer.output, keepdims=True)
                 * self.config.LOSS_WEIGHTS.get(name, 1.))
@@ -2190,13 +2190,14 @@ class MaskRCNN():
 
         # Add metrics for losses
         for name in loss_names:
-            if name in self.keras_model.metrics_names:
+            if tf.bool(name in self.keras_model.metrics_names):
                 continue
             layer = self.keras_model.get_layer(name)
             self.keras_model.metrics_names.append(name)
             loss = (
                 tf.reduce_mean(input_tensor=layer.output, keepdims=True)
-                * self.config.LOSS_WEIGHTS.get(name, 1.))
+                * self.config.LOSS_WEIGHTS.get(name, 1.)
+            )
             self.keras_model.metrics_tensors.append(loss)
 
     def set_trainable(self, layer_regex, keras_model=None, indent=0, verbose=1):
