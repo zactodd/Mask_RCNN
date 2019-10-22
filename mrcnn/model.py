@@ -17,17 +17,18 @@ from collections import OrderedDict
 import multiprocessing
 import numpy as np
 import tensorflow as tf
-import tensorflow.keras.backend as K
-import tensorflow.keras.layers as KL
-import tensorflow.python.keras.engine as KE
-import tensorflow.keras.models as KM
+import keras
+import keras.backend as K
+import keras.layers as KL
+import keras.engine as KE
+import keras.models as KM
 
 from mrcnn import utils
 
 # Requires TensorFlow 1.3+ and Keras 2.0.8+.
 from distutils.version import LooseVersion
 assert LooseVersion(tf.__version__) >= LooseVersion("1.3")
-# assert LooseVersion(keras.__version__) >= LooseVersion('2.0.8')
+assert LooseVersion(keras.__version__) >= LooseVersion('2.0.8')
 
 ############################################################
 #  Utility Functions
@@ -2149,7 +2150,6 @@ class MaskRCNN():
                                 md5_hash='a268eb855778b3df3c7506639542a6af')
         return weights_path
 
-    @tf.function
     def compile(self, learning_rate, momentum):
         """Gets the model ready for training. Adds losses, regularization, and
         metrics. Then calls the Keras compile() function.
@@ -2168,8 +2168,6 @@ class MaskRCNN():
         ]
         for name in loss_names:
             layer = self.keras_model.get_layer(name)
-            if tf.bool(layer.output in self.keras_model.losses):
-                continue
             loss = (
                 tf.reduce_mean(input_tensor=layer.output, keepdims=True)
                 * self.config.LOSS_WEIGHTS.get(name, 1.))
@@ -2190,7 +2188,7 @@ class MaskRCNN():
 
         # Add metrics for losses
         for name in loss_names:
-            if tf.bool(name in self.keras_model.metrics_names):
+            if name in self.keras_model.metrics_names:
                 continue
             layer = self.keras_model.get_layer(name)
             self.keras_model.metrics_names.append(name)
@@ -2198,7 +2196,7 @@ class MaskRCNN():
                 tf.reduce_mean(input_tensor=layer.output, keepdims=True)
                 * self.config.LOSS_WEIGHTS.get(name, 1.)
             )
-            self.keras_model.metrics_tensors.append(loss)
+            self.keras_model.add_metric(loss, name)
 
     def set_trainable(self, layer_regex, keras_model=None, indent=0, verbose=1):
         """Sets model layers as trainable if their names match
